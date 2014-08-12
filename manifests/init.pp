@@ -7,6 +7,7 @@
 #   - Fedora Linux
 #   - Debian Linux
 #   - Ubuntu Linux
+#   - CentOS
 #
 # === Parameters
 #
@@ -39,74 +40,41 @@
 #    version => '1.8'
 #  }
 #
-# === Authors
-#
-# Jochen Schalanda <j.schalanda@gini.net>
-#
-# === Copyright
-#
-# Copyright 2012, 2013 smarchive GmbH, 2013 Gini GmbH
 #
 class gradle(
-  $version  = 'UNSET',
-  $base_url = 'UNSET',
-  $url      = 'UNSET',
-  $target   = 'UNSET',
-  $timeout  = 120,
-  $daemon   = true
-) {
+  $version  = $gradle::params::version,
+  $base_url = $gradle::params::base_url,
+  $url      = $gradle::params::url,
+  $target   = $gradle::params::target,
+  $timeout  = $gradle::params::timeout,
+  $daemon   = $gradle::params::daemon,
+) inherits gradle::params {
 
-  include gradle::params
+  include stdlib
 
-  $version_real = $version ? {
-    'UNSET' => $::gradle::params::version,
-    default => $version,
-  }
+  validate_string($version)
+  validate_string($base_url)
+  validate_string($target)
 
-  $base_url_real = $base_url ? {
-    'UNSET' => $::gradle::params::base_url,
-    default => $base_url,
-  }
-
-  $url_real = $url ? {
-    'UNSET' => "${base_url_real}/gradle-${version_real}-all.zip",
-    default => $url,
-  }
-
-  $target_real = $target ? {
-    'UNSET' => $::gradle::params::target,
-    default => $target,
-  }
-
-  Exec {
-    path  => [
-      '/usr/local/sbin', '/usr/local/bin',
-      '/usr/sbin', '/usr/bin', '/sbin', '/bin',
-    ],
-    user  => 'root',
-    group => 'root',
-  }
-
-  archive { "gradle-${version_real}-all.zip":
-    ensure     => present,
-    url        => $url_real,
-    checksum   => false,
-    src_target => '/var/tmp',
-    target     => '/opt',
-    root_dir   => "gradle-${version_real}",
-    extension  => 'zip',
-    timeout    => $timeout,
-  }
-
-  file { $target_real:
-    ensure  => link,
-    target  => "/opt/gradle-${version_real}",
-    require => Archive["gradle-${version_real}-all.zip"],
-  }
+  $gradle_filename = "gradle-${version}-all.zip"
+  $gradle_directory = "${target}/gradle-${version}"
+  $url = "${base_url}/${gradle_filename}"
 
   file { '/etc/profile.d/gradle.sh':
     ensure  => file,
     mode    => '0644',
     content => template("${module_name}/gradle.sh.erb"),
   }
+
+  staging::file { $gradle_filename :
+    source  => "${base_url}/${gradle_filename}",
+    timeout => $timeout,
+  }
+
+  staging::extract { $gradle_filename :
+    target  => $target,
+    creates => $gradle_directory,
+    require => [ Staging::File[$gradle_filename] ],
+  }
+
 }

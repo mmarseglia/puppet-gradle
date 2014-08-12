@@ -37,4 +37,3 @@ describe 'gradle' do
     end
   end
 end
-
