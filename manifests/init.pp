@@ -9,6 +9,9 @@
 #   - Ubuntu Linux
 #   - CentOS
 #
+# Supported puppet version
+#   - Puppet > 2.6.2
+#
 # === Parameters
 #
 # [*version*]
@@ -44,7 +47,6 @@
 class gradle(
   $version  = $gradle::params::version,
   $base_url = $gradle::params::base_url,
-  $url      = $gradle::params::url,
   $target   = $gradle::params::target,
   $timeout  = $gradle::params::timeout,
   $daemon   = $gradle::params::daemon,
