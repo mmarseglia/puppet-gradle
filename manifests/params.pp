@@ -2,7 +2,7 @@
 #
 # === Authors
 #
-# Jochen Schalanda <j.schalanda@gini.net># == Class: gradle::params
+# Jochen Schalanda <j.schalanda@gini.net>
 #
 # === Copyright
 #
