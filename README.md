@@ -26,7 +26,7 @@ The module has been tested on the following operating systems. Testing and patch
 
 * Fedora 17
 * Fedora 18
-
+* CentOS 6.5
 
 Support
 -------
