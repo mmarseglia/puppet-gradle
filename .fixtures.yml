@@ -1,0 +1,4 @@
+fixtures:
+  repositories:
+    stdlib: "git://github.com/puppetlabs/puppetlabs-stdlib"
+    staging: "git://github.com/nanliu/puppet-staging"
