@@ -3,6 +3,8 @@
 # Install the Gradle build system from the official project site.
 # The required Java runtime environment will not be installed automatically.
 #
+# Requires module staging, https://github.com/nanliu/puppet-staging
+#
 # Supported operating systems are:
 #   - Fedora Linux
 #   - Debian Linux
@@ -33,9 +35,11 @@
 #   Specify if the Gradle daemon should be running
 #
 # === Variables
+# [*gradle_filename*]
+#   Full name of the gradle archive we are going to download from the remote site.
 #
-# The variables being used by this module are named exactly like the class
-# parameters with the prefix 'gradle_', e. g. *gradle_version* and *gradle_url*.
+# [*gradle_directory*]
+#   Directory to extract the gradle archive into.
 #
 # === Examples
 #
@@ -54,29 +58,34 @@ class gradle(
 
   include stdlib
 
+  # input validation
   validate_string($version)
   validate_string($base_url)
   validate_string($target)
 
+  # filename of the gradle archive to obtain from $base_url
   $gradle_filename = "gradle-${version}-all.zip"
-  $gradle_directory = "${target}/gradle-${version}"
-  $url = "${base_url}/${gradle_filename}"
 
+  # directory to unpack the grade archive into
+  $gradle_directory = "${target}/gradle-${version}"
+
+  # install a default gradle profile for all users
   file { '/etc/profile.d/gradle.sh':
     ensure  => file,
     mode    => '0644',
     content => template("${module_name}/gradle.sh.erb"),
   }
 
+  # download the gradle archive from the remote site
   staging::file { $gradle_filename :
     source  => "${base_url}/${gradle_filename}",
     timeout => $timeout,
   }
 
+  # extract the archive into the target directory
   staging::extract { $gradle_filename :
     target  => $target,
     creates => $gradle_directory,
     require => [ Staging::File[$gradle_filename] ],
   }
-
 }
