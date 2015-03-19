@@ -83,9 +83,14 @@ class gradle(
   }
 
   # extract the archive into the target directory
-  staging::extract { $gradle_filename :
-    target  => $target,
-    creates => $gradle_directory,
-    require => [ Staging::File[$gradle_filename] ],
+  #staging::extract { $gradle_filename :
+  #  target  => $target,
+  #  creates => $gradle_directory,
+  #  require => [ Staging::File[$gradle_filename] ],
+  #}
+  exec { 'extract_gradle' :
+    cwd => '/opt',
+    command => '/usr/bin/unzip -o /opt/staging/gradle/gradle-1.8-all.zip -d /opt',
+    require => Staging::File[$gradle_filename],
   }
 }
