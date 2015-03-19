@@ -1,7 +1,7 @@
 Gradle Puppet Module
 ====================
 
-[![Build Status](https://secure.travis-ci.org/gini/puppet-gradle.png)](http://travis-ci.org/gini/puppet-gradle)
+[![Build Status](https://secure.travis-ci.org/mmarseglia/puppet-gradle.png)](http://travis-ci.org/mmarseglia/puppet-gradle)
 
 Overview
 --------
