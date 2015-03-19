@@ -3,10 +3,8 @@ puppetversion = ENV.key?('PUPPET_VERSION') ? "#{ENV['PUPPET_VERSION']}" : ['~> 3
 
 gem 'puppet', puppetversion
 
-group :test do
-  gem 'rake', '~> 10.1.0'
-  gem 'rspec', '~> 2.14.1'
-  gem 'rspec-puppet', '~> 0.1.6'
-  gem 'puppetlabs_spec_helper', '~> 0.4.1'
-  gem 'puppet-lint', '~> 0.3.2'
-end
+gem 'rake', '~> 10.1.0'
+gem 'rspec', '~> 2.14.1'
+gem 'puppetlabs_spec_helper', :git => 'https://github.com/puppetlabs/puppetlabs_spec_helper.git', :branch => 'master'
+gem 'rspec-puppet', :git => 'https://github.com/rodjek/rspec-puppet.git', :branch => 'master'
+gem 'puppet-lint', '1.1.0', :git => 'https://github.com/rodjek/puppet-lint.git'
