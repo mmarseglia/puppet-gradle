@@ -92,5 +92,6 @@ class gradle(
     cwd => '/opt',
     command => '/usr/bin/unzip -o /opt/staging/gradle/gradle-1.8-all.zip -d /opt',
     require => Staging::File[$gradle_filename],
+    creates => '/opt/gradle-1.8',
   }
 }
